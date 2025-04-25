@@ -1,0 +1,23 @@
+package bugs.metal;
+import bugs.Bug; 
+
+public class ChromeBeetle extends Bug {
+
+    public ChromeBeetle(String name) {
+        super(name, "metal", 1); //default level is 1
+    }
+
+    public void attack(Bug target) {
+        System.out.println(name + " uses Blinding Reflect!");
+        int damage = 2;
+        enemy.takeDamage(damage);
+        this.levelUp(1); 
+    }
+
+    public void specialAttack(Bug target) {
+        System.out.println(name + " uses Chrome Shell!");
+        int damage = 4;
+        target.takeDamage(damage);
+        this.levelUp(3);
+    }
+}

@@ -1,5 +1,4 @@
 package bugs;
-import java.util.Random;
 
 public abstract class Bug {
     protected String name;
@@ -8,7 +7,8 @@ public abstract class Bug {
     protected int health;
     protected int maxHealth;
     protected Bug enemy; // current target
-    static Bug[][] coordinates = new Bug[10][10]; // 2D array to represent the world
+    protected int x; // x coordinate on the grid
+    protected int y; // y coordinate on the grid
 
     public Bug(String name, String type, int level) {
         this.name = name;
@@ -16,15 +16,8 @@ public abstract class Bug {
         this.level = level;
         this.maxHealth = 10 + (level * 2);
         this.health = this.maxHealth;
-        
-        while (true) { // loop until a valid spot is found
-            int x = new Random().nextInt(10);
-            int y = new Random().nextInt(10);
-            if (coordinates[x][y] == null) { // check if the spot is empty
-                coordinates[x][y] = this; // place the bug in the world
-                break;
-            }
-        }
+        this.x = (int) (Math.random() * 9);
+        this.y = (int) (Math.random() * 9);
     }
 
     public abstract void attack(Bug target);
@@ -69,5 +62,18 @@ public abstract class Bug {
 
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+    public void setX(int x) {
+        this.x = x;
+    }
+    public void setY(int y) {
+        this.y = y;
     }
 }

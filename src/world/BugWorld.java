@@ -41,7 +41,7 @@ public class BugWorld {
 
      private void readNamesFile() {
         try {
-            names = Files.readAllLines((Paths.get("names.txt")));
+            names = Files.readAllLines((Paths.get("src/names.txt")));
         } catch (Exception e) {
             System.out.println("Error reading creature types: " + e.getMessage());
         }

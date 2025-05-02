@@ -83,7 +83,18 @@ public class BugWorld {
             System.out.println("\n== Day " + day + " ==");
             spawnBug();
             List<Bug> aliveBugs = getAliveBugs();
-
+ 
+            for (Bug bug : aliveBugs) {
+                if (bug.getLevel() > 0 && bug.getLevel() % 15 == 0 && !bug.hasEvolved()) {
+                    System.out.println(bug.getName() + " is evolving at level " + bug.getLevel() + "!");
+                    bug.setMaxHealth((int) (bug.getMaxHealth() * 1.2));
+                    bug.setHealth(bug.getMaxHealth());
+                    bug.setEvolved(true);
+                }
+                if (bug.getLevel() % 15 !=0) {
+                    bug.setEvolved(false);
+                }
+            }
             gui.updateGrid(aliveBugs);
             try{
                 TimeUnit.SECONDS.sleep(2);

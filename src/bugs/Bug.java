@@ -9,6 +9,7 @@ public abstract class Bug {
     protected Bug enemy; // current target
     protected int x; // x coordinate on the grid
     protected int y; // y coordinate on the grid
+    protected boolean evolved = false;
 
     public Bug(String name, String type, int level) {
         this.name = name;
@@ -41,6 +42,7 @@ public abstract class Bug {
         this.maxHealth = 10 + (level * 2);
         this.health += (maxHealth - oldMaxHealth); // heal when leveling up
         System.out.println(name + " leveled up to level " + level + "!");
+        evolved = false;
     }
 
     // getters
@@ -75,5 +77,17 @@ public abstract class Bug {
     }
     public void setY(int y) {
         this.y = y;
+    }
+    public boolean hasEvolved() {
+        return evolved;
+    }
+    public void setEvolved(boolean evolved) {
+        this.evolved = evolved;
+    }
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+    }
+    public void setHealth(int health) {
+        this.health = health;
     }
 }

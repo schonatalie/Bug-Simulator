@@ -1,5 +1,5 @@
 package world;
-
+import java.util.Random;
 import bugs.*;
 import bugs.air.TailWindWasp;
 import bugs.earth.MudMantis;
@@ -11,7 +11,13 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javax.swing.JFrame;
+
+import java.util.concurrent.TimeUnit;
+
 public class BugWorld {
+    world.BugWorldGUI gui = new world.BugWorldGUI();
+
     private List<Bug> bugs = new ArrayList<>();
     private static final int MAX_BUGS = 15;
     private int genisis = 20;
@@ -59,8 +65,12 @@ public class BugWorld {
             return "Bug-" + (int) (Math.random() * 50);
         }
     }
-
+    
     public void runSimulation(int days) {
+        gui.pack();
+        gui.setVisible(true);
+        //gui.updateGrid(temp);
+        gui.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
         // spawn initial bugs
         bugs.add(new TailWindWasp("Chromium"));
         bugs.add(new MudMantis("Muddy"));
@@ -68,11 +78,19 @@ public class BugWorld {
         bugs.add(new RainOdonata("Rainy"));
         bugs.add(new TailWindWasp("Breezy"));
         bugs.add(new ArmourBeetle("Steely"));
-
+        Random rand = new Random();
         for (int day = 1; day <= days; day++) {
             System.out.println("\n== Day " + day + " ==");
             spawnBug();
             List<Bug> aliveBugs = getAliveBugs();
+
+            gui.updateGrid(aliveBugs);
+            try{
+                TimeUnit.SECONDS.sleep(2);
+            } catch(Exception e){
+                System.out.println("Cant wait for some reason");
+            }
+            
             if (aliveBugs.size() >= 2) {
                 Collections.shuffle(aliveBugs);
                 Bug attacker = aliveBugs.get(0);
@@ -85,7 +103,20 @@ public class BugWorld {
                 }
                 
                 bugs.removeIf(bug -> !bug.isAlive());
+                for(int i = 0; i < aliveBugs.size(); i++){
+                    if((aliveBugs.get(i).getX()+1 < 9) && (aliveBugs.get(i).getX()-1 > 0)){
+                        aliveBugs.get(i).setX(aliveBugs.get(i).getX()+rand.nextInt(-1,2));
+                    }
+                    if((aliveBugs.get(i).getY()+1 < 9) && (aliveBugs.get(i).getY()-1 > 0)){
+                        aliveBugs.get(i).setY(aliveBugs.get(i).getY()+rand.nextInt(-1,2));
+                    }
+                    //aliveBugs.get(i).setY(aliveBugs.get(i).getY()+Math.round(.5f)); 
+                    //aliveBugs.get(i).setX(aliveBugs.get(i).getX()+rand.nextInt(-3,3));
+                    //aliveBugs.get(i).setY(aliveBugs.get(i).getY()+Math.round(.5f));
+                }
             }
+            //Update bug postions
+            
             printStatus();
         }
     }

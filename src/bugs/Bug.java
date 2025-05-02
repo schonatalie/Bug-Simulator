@@ -3,6 +3,7 @@ package bugs;
 public abstract class Bug {
     protected String name;
     protected String type;
+    protected String imagePath;
     protected int level;
     protected int health;
     protected int maxHealth;
@@ -89,5 +90,8 @@ public abstract class Bug {
     }
     public void setHealth(int health) {
         this.health = health;
+    }
+    public String getImagepath(){
+        return this.imagePath;
     }
 }

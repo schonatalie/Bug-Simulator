@@ -5,6 +5,7 @@ public class MudMantis extends Bug {
 
     public MudMantis(String name) {
         super(name, "earth", 1); //default level is 1
+        imagePath = "images/mudmantis.jpg";
     }
 
     @Override

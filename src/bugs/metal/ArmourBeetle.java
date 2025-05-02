@@ -5,6 +5,7 @@ public class ArmourBeetle extends Bug {
 
     public ArmourBeetle(String name) {
         super(name, "metal", 1); //default level is 1
+        imagePath = "images/armoredbeattle.jpg";
     }
 
     @Override

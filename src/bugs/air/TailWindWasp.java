@@ -5,6 +5,7 @@ public class TailWindWasp extends Bug {
 
     public TailWindWasp(String name) {
         super(name, "air", 1); //default level is 1
+        imagePath = "images/tailwindwasp.jpg";
     }
 
     @Override

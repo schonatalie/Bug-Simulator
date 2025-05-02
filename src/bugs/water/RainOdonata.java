@@ -4,6 +4,7 @@ import bugs.Bug;
 public class RainOdonata extends Bug {
     public RainOdonata(String name) {
         super(name, "water", 1);
+        imagePath = "images/rainordonata.jpg";
     }
 
     @Override

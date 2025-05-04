@@ -3,7 +3,7 @@ package bugs;
 public abstract class Bug {
     protected String name;
     protected String type;
-    protected String imagePath;
+    protected String imagePath; //path to image of said bug
     protected int level;
     protected int health;
     protected int maxHealth;
@@ -46,7 +46,7 @@ public abstract class Bug {
         evolved = false;
     }
 
-    // getters
+    // getters/setters
     public String getName() {
         return this.name;
     }

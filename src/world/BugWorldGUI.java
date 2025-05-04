@@ -20,65 +20,53 @@ public class BugWorldGUI extends JFrame {
         setSize(600, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-
-        gridPanel = new JPanel();
+        //sets up the board display that the user will see
+        gridPanel = new JPanel(); //panel that will hold all the cells 
         gridPanel.setLayout(new GridLayout(GRID_SIZE, GRID_SIZE));
-        for (int i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-            //CardLayout cardLayout = new CardLayout();
+        for (int i = 0; i < GRID_SIZE * GRID_SIZE; i++) { //for all cells 
             JPanel cell = new JPanel();
-            cell.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
+            cell.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE)); 
             cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             gridPanel.add(cell);
-            
-            
-
-            //HERE we could have the bugs in? cell.add()?
-
-            
         }
         
-        add(gridPanel, BorderLayout.CENTER);
+        add(gridPanel, BorderLayout.CENTER); 
     }
+    //resizes the image to the target size
     BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException {
         BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics2D = resizedImage.createGraphics();
-        graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null);
+        graphics2D.drawImage(originalImage, 0, 0, targetWidth, targetHeight, null); //resizes the image
         graphics2D.dispose();
         return resizedImage;
     }
+    //updates all bugs on the grid
     public void updateGrid(List<Bug> bugs) {
         System.out.println("Updating bugs!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        for (int i = 0; i < (GRID_SIZE * GRID_SIZE); i++) {
-            //System.out.println(i);
-            JPanel cell = (JPanel) gridPanel.getComponent(i);
-            cell.setBackground(Color.WHITE);
+        for (int i = 0; i < (GRID_SIZE * GRID_SIZE); i++) { //for all cells, clears them
+            JPanel cell = (JPanel) gridPanel.getComponent(i); 
+            cell.setBackground(Color.WHITE); 
             cell.removeAll();
-        }
-
-        for (Bug bug : bugs) {
+        }   
+        //then for each bug gets its postion and in that spot loads in the image of that bug
+        for (Bug bug : bugs) { 
             int x = bug.getX();
             int y = bug.getY();
-            //System.out.print("X: ");
-            //System.out.println(x);
-            //System.out.print("Y: ");
-            //System.out.println(y);
             BufferedImage myPicture= null;
             BufferedImage myPicturersized= null;
-            try{
+            try{ //loads in image file 
                 File file = new File(bug.getImagepath());
                 myPicture = ImageIO.read(file);
                 myPicturersized = resizeImage(myPicture,CELL_SIZE,CELL_SIZE);
-                //graphic = myPicture.createGraphics();
-                //System.out.println("Was able to load image");
             }catch(Exception e){
                 System.out.println(e);
                 System.out.println("Could not load in the image");
             }
-            JPanel cell = (JPanel) gridPanel.getComponent(y * GRID_SIZE + x);
-            //JLabel label = new JLabel(bug.getName());
-            JLabel label = new JLabel(new ImageIcon(myPicturersized));
+            JPanel cell = (JPanel) gridPanel.getComponent(y * GRID_SIZE + x); //gets the component at the location
+            JLabel label = new JLabel(new ImageIcon(myPicturersized)); //gives it the image 
             cell.add(label);
         }
+        //updates the grid panel
         gridPanel.revalidate();
         gridPanel.repaint();
     }

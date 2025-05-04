@@ -28,7 +28,6 @@ public class BugWorld {
         if (bugs.size() >= MAX_BUGS) { // if the max number of bugs is reached, do not spawn a new bug
             return;
         }
-
         int randomNum = new Random().nextInt(100) + 1;
         if (randomNum > genisis) { // if the random number is greater than the genisis rate, do not spawn a new bug
             return;
@@ -44,7 +43,7 @@ public class BugWorld {
             case 3 -> bugs.add(new TailWindWasp(name));
         }
     }
-
+    //reads in names from the file 
      private void readNamesFile() {
         try {
             names = Files.readAllLines((Paths.get("names.txt")));
@@ -53,12 +52,11 @@ public class BugWorld {
         }
         readNames = true;
     }
-
+    //pulls a random name
     private String getRandomName() {
         if (!readNames) {
             readNamesFile();
         }
-
         if (!names.isEmpty()) {
             return names.get(new Random().nextInt(names.size()));
         } else {
@@ -67,11 +65,12 @@ public class BugWorld {
     }
     
     public void runSimulation(int days) {
+        //opens GUI
         gui.pack();
         gui.setVisible(true);
-        //gui.updateGrid(temp);
         gui.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
-        // spawn initial bugs
+
+        
         bugs.add(new TailWindWasp("Chromium"));
         bugs.add(new MudMantis("Muddy"));
         bugs.add(new ArmourBeetle("Ironclad"));
@@ -81,27 +80,31 @@ public class BugWorld {
         Random rand = new Random();
         for (int day = 1; day <= days; day++) {
             System.out.println("\n== Day " + day + " ==");
-            spawnBug();
+            //spawns in bugs if it can
+            spawnBug(); 
+            //gets all alive bugs and updates them
             List<Bug> aliveBugs = getAliveBugs();
- 
             for (Bug bug : aliveBugs) {
+                //if bug lvel high enough it evoles
                 if (bug.getLevel() > 0 && bug.getLevel() % 15 == 0 && !bug.hasEvolved()) {
                     System.out.println(bug.getName() + " is evolving at level " + bug.getLevel() + "!");
                     bug.setMaxHealth((int) (bug.getMaxHealth() * 1.2));
                     bug.setHealth(bug.getMaxHealth());
                     bug.setEvolved(true);
                 }
+                //if it hasnt reached high enough level, not evloved
                 if (bug.getLevel() % 15 !=0) {
                     bug.setEvolved(false);
                 }
             }
+            //updates the grid and gives time for the changes to occur,(while also making it nicer for the user)
             gui.updateGrid(aliveBugs);
             try{
                 TimeUnit.SECONDS.sleep(2);
             } catch(Exception e){
                 System.out.println("Cant wait for some reason");
             }
-            
+            //preforms combat for random bugs
             if (aliveBugs.size() >= 2) {
                 Collections.shuffle(aliveBugs);
                 Bug attacker = aliveBugs.get(0);
@@ -113,21 +116,18 @@ public class BugWorld {
                     attacker.specialAttack(defender);
                 }
                 
-                bugs.removeIf(bug -> !bug.isAlive());
+                bugs.removeIf(bug -> !bug.isAlive()); //for all bugs in the list, if dead, remove
+                //for each alive bug, moves it to a random cell near it / updates postion 
                 for(int i = 0; i < aliveBugs.size(); i++){
-                    if((aliveBugs.get(i).getX()+1 < 9) && (aliveBugs.get(i).getX()-1 > 0)){
+                    //ensures it doesnt move out of bounds 
+                    if((aliveBugs.get(i).getX()+1 < 9) && (aliveBugs.get(i).getX()-1 > 0)){ 
                         aliveBugs.get(i).setX(aliveBugs.get(i).getX()+rand.nextInt(-1,2));
                     }
                     if((aliveBugs.get(i).getY()+1 < 9) && (aliveBugs.get(i).getY()-1 > 0)){
                         aliveBugs.get(i).setY(aliveBugs.get(i).getY()+rand.nextInt(-1,2));
                     }
-                    //aliveBugs.get(i).setY(aliveBugs.get(i).getY()+Math.round(.5f)); 
-                    //aliveBugs.get(i).setX(aliveBugs.get(i).getX()+rand.nextInt(-3,3));
-                    //aliveBugs.get(i).setY(aliveBugs.get(i).getY()+Math.round(.5f));
                 }
             }
-            //Update bug postions
-            
             printStatus();
         }
     }
